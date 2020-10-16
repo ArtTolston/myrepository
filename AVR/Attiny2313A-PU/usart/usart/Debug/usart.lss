@@ -1,0 +1,194 @@
+
+usart.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000d6  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000012a  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  0000012a  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000015c  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000040  00000000  00000000  0000019c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000072d  00000000  00000000  000001dc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000005a2  00000000  00000000  00000909  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000033a  00000000  00000000  00000eab  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000080  00000000  00000000  000011e8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000340  00000000  00000000  00001268  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000000c4  00000000  00000000  000015a8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000030  00000000  00000000  0000166c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	14 c0       	rjmp	.+40     	; 0x2a <__ctors_end>
+   2:	19 c0       	rjmp	.+50     	; 0x36 <__bad_interrupt>
+   4:	18 c0       	rjmp	.+48     	; 0x36 <__bad_interrupt>
+   6:	17 c0       	rjmp	.+46     	; 0x36 <__bad_interrupt>
+   8:	16 c0       	rjmp	.+44     	; 0x36 <__bad_interrupt>
+   a:	15 c0       	rjmp	.+42     	; 0x36 <__bad_interrupt>
+   c:	14 c0       	rjmp	.+40     	; 0x36 <__bad_interrupt>
+   e:	21 c0       	rjmp	.+66     	; 0x52 <__vector_7>
+  10:	12 c0       	rjmp	.+36     	; 0x36 <__bad_interrupt>
+  12:	11 c0       	rjmp	.+34     	; 0x36 <__bad_interrupt>
+  14:	10 c0       	rjmp	.+32     	; 0x36 <__bad_interrupt>
+  16:	0f c0       	rjmp	.+30     	; 0x36 <__bad_interrupt>
+  18:	0e c0       	rjmp	.+28     	; 0x36 <__bad_interrupt>
+  1a:	0d c0       	rjmp	.+26     	; 0x36 <__bad_interrupt>
+  1c:	0c c0       	rjmp	.+24     	; 0x36 <__bad_interrupt>
+  1e:	0b c0       	rjmp	.+22     	; 0x36 <__bad_interrupt>
+  20:	0a c0       	rjmp	.+20     	; 0x36 <__bad_interrupt>
+  22:	09 c0       	rjmp	.+18     	; 0x36 <__bad_interrupt>
+  24:	08 c0       	rjmp	.+16     	; 0x36 <__bad_interrupt>
+  26:	07 c0       	rjmp	.+14     	; 0x36 <__bad_interrupt>
+  28:	06 c0       	rjmp	.+12     	; 0x36 <__bad_interrupt>
+
+0000002a <__ctors_end>:
+  2a:	11 24       	eor	r1, r1
+  2c:	1f be       	out	0x3f, r1	; 63
+  2e:	cf ed       	ldi	r28, 0xDF	; 223
+  30:	cd bf       	out	0x3d, r28	; 61
+  32:	2b d0       	rcall	.+86     	; 0x8a <main>
+  34:	4e c0       	rjmp	.+156    	; 0xd2 <_exit>
+
+00000036 <__bad_interrupt>:
+  36:	e4 cf       	rjmp	.-56     	; 0x0 <__vectors>
+
+00000038 <USART_Init>:
+}
+
+unsigned char USART_Reception(void) {
+	while( !(UCSRA&(1 << RXC) ));
+	return UDR;
+}
+  38:	92 b9       	out	0x02, r25	; 2
+  3a:	89 b9       	out	0x09, r24	; 9
+  3c:	88 e1       	ldi	r24, 0x18	; 24
+  3e:	8a b9       	out	0x0a, r24	; 10
+  40:	57 9a       	sbi	0x0a, 7	; 10
+  42:	59 9a       	sbi	0x0b, 1	; 11
+  44:	86 e3       	ldi	r24, 0x36	; 54
+  46:	83 b9       	out	0x03, r24	; 3
+  48:	08 95       	ret
+
+0000004a <USART_Transmit>:
+  4a:	5d 9b       	sbis	0x0b, 5	; 11
+  4c:	fe cf       	rjmp	.-4      	; 0x4a <USART_Transmit>
+  4e:	8c b9       	out	0x0c, r24	; 12
+  50:	08 95       	ret
+
+00000052 <__vector_7>:
+
+ISR(USART_RX_vect) {
+  52:	1f 92       	push	r1
+  54:	0f 92       	push	r0
+  56:	0f b6       	in	r0, 0x3f	; 63
+  58:	0f 92       	push	r0
+  5a:	11 24       	eor	r1, r1
+  5c:	2f 93       	push	r18
+  5e:	8f 93       	push	r24
+  60:	9f 93       	push	r25
+	PORTB = 0xff;
+  62:	8f ef       	ldi	r24, 0xFF	; 255
+  64:	88 bb       	out	0x18, r24	; 24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  66:	2f ef       	ldi	r18, 0xFF	; 255
+  68:	84 e3       	ldi	r24, 0x34	; 52
+  6a:	9c e0       	ldi	r25, 0x0C	; 12
+  6c:	21 50       	subi	r18, 0x01	; 1
+  6e:	80 40       	sbci	r24, 0x00	; 0
+  70:	90 40       	sbci	r25, 0x00	; 0
+  72:	e1 f7       	brne	.-8      	; 0x6c <__vector_7+0x1a>
+  74:	00 c0       	rjmp	.+0      	; 0x76 <__vector_7+0x24>
+  76:	00 00       	nop
+	_delay_ms(500);
+	PORTB = 0x00;
+  78:	18 ba       	out	0x18, r1	; 24
+}
+  7a:	9f 91       	pop	r25
+  7c:	8f 91       	pop	r24
+  7e:	2f 91       	pop	r18
+  80:	0f 90       	pop	r0
+  82:	0f be       	out	0x3f, r0	; 63
+  84:	0f 90       	pop	r0
+  86:	1f 90       	pop	r1
+  88:	18 95       	reti
+
+0000008a <main>:
+
+int main(void)
+{
+	int speed = 3;
+	unsigned char data;
+    USART_Init(speed); // baudrate 
+  8a:	83 e0       	ldi	r24, 0x03	; 3
+  8c:	90 e0       	ldi	r25, 0x00	; 0
+  8e:	d4 df       	rcall	.-88     	; 0x38 <USART_Init>
+	sei();
+  90:	78 94       	sei
+    while (1) 
+    {
+		    USART_Transmit('X');//Передаем при включении
+  92:	88 e5       	ldi	r24, 0x58	; 88
+  94:	da df       	rcall	.-76     	; 0x4a <USART_Transmit>
+		    USART_Transmit('Y');//сообщение "Ok!", что свидетельствует
+  96:	89 e5       	ldi	r24, 0x59	; 89
+  98:	d8 df       	rcall	.-80     	; 0x4a <USART_Transmit>
+		    USART_Transmit('I');//о правильно работе программы
+  9a:	89 e4       	ldi	r24, 0x49	; 73
+  9c:	d6 df       	rcall	.-84     	; 0x4a <USART_Transmit>
+			USART_Transmit('_');
+  9e:	8f e5       	ldi	r24, 0x5F	; 95
+  a0:	d4 df       	rcall	.-88     	; 0x4a <USART_Transmit>
+			USART_Transmit('s');
+  a2:	83 e7       	ldi	r24, 0x73	; 115
+  a4:	d2 df       	rcall	.-92     	; 0x4a <USART_Transmit>
+			USART_Transmit('o');
+  a6:	8f e6       	ldi	r24, 0x6F	; 111
+  a8:	d0 df       	rcall	.-96     	; 0x4a <USART_Transmit>
+			USART_Transmit('S');
+  aa:	83 e5       	ldi	r24, 0x53	; 83
+  ac:	ce df       	rcall	.-100    	; 0x4a <USART_Transmit>
+			USART_Transmit('E');
+  ae:	85 e4       	ldi	r24, 0x45	; 69
+  b0:	cc df       	rcall	.-104    	; 0x4a <USART_Transmit>
+			USART_Transmit('H');
+  b2:	88 e4       	ldi	r24, 0x48	; 72
+  b4:	ca df       	rcall	.-108    	; 0x4a <USART_Transmit>
+		    USART_Transmit(0x0d);//переход в начало строки
+  b6:	8d e0       	ldi	r24, 0x0D	; 13
+  b8:	c8 df       	rcall	.-112    	; 0x4a <USART_Transmit>
+		    USART_Transmit(0x0a); // new line
+  ba:	8a e0       	ldi	r24, 0x0A	; 10
+  bc:	c6 df       	rcall	.-116    	; 0x4a <USART_Transmit>
+  be:	2f ef       	ldi	r18, 0xFF	; 255
+  c0:	84 e3       	ldi	r24, 0x34	; 52
+  c2:	9c e0       	ldi	r25, 0x0C	; 12
+  c4:	21 50       	subi	r18, 0x01	; 1
+  c6:	80 40       	sbci	r24, 0x00	; 0
+  c8:	90 40       	sbci	r25, 0x00	; 0
+  ca:	e1 f7       	brne	.-8      	; 0xc4 <main+0x3a>
+  cc:	00 c0       	rjmp	.+0      	; 0xce <main+0x44>
+  ce:	00 00       	nop
+  d0:	e0 cf       	rjmp	.-64     	; 0x92 <main+0x8>
+
+000000d2 <_exit>:
+  d2:	f8 94       	cli
+
+000000d4 <__stop_program>:
+  d4:	ff cf       	rjmp	.-2      	; 0xd4 <__stop_program>
