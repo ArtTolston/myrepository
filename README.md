@@ -1,1 +1,1 @@
-
+- This repo is all about my project and task that I have been doing during my study in MIPT (Moscow Institute of Physics and Technology)
